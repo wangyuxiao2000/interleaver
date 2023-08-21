@@ -11,7 +11,8 @@ echo Version : V 1.0
 echo;                                       
 echo Enter "1" for RTL Simulation Model
 echo Enter "2" for Vivado Model
-echo Enter "3" to exit 
+echo Enter "3" for Vitis HLS Model
+echo Enter "4" to exit 
 echo ************************************************
 set option=0
 set/p option=
@@ -137,8 +138,57 @@ goto vivado_model
 
 )
 
-::::::::::::退出::::::::::::
+::::::::::::使用Vitis HLS建立工程::::::::::::
 if "!option!"=="3" (
+:hls_model
+echo;
+echo;
+echo ****************Vitis HLS Model*****************-0
+echo Enter "1" to reset HLS project
+echo Enter "2" to creat HLS project
+echo Enter "3" to exit HLS Model
+echo ************************************************
+set hls_choose=0
+set/p hls_choose=
+
+if "!hls_choose!"=="1" (
+if not exist project (
+echo There is no HLS project.
+goto hls_model
+)else (
+del/f/s/q project\*.*
+rd/s/q project
+goto hls_model
+)
+)
+
+if "!hls_choose!"=="2" (
+if not exist project (
+md project
+)
+if exist ./sources\creat_project_h.tcl (
+copy "./sources\creat_project_h.tcl" "project" /y
+)else (
+echo Missing file creat_project_h.tcl in "sources"
+goto hls_model
+)
+cd ./project
+start cmd /c vitis_hls -f creat_project_h.tcl
+cd ../
+goto hls_model
+)
+
+if "!hls_choose!"=="3" (
+goto begin
+)else (
+echo INVALID ENTRY
+goto hls_model
+)
+
+)
+
+::::::::::::退出::::::::::::
+if "!option!"=="4" (
 exit)else (
 echo INVALID ENTRY
 goto begin
