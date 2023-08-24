@@ -62,6 +62,17 @@ set_property tooltip {Number of rows in block interleaver.} [ipgui::get_guiparam
 set_property widget {textEdit} [ipgui::get_guiparamspec -name "col" -component [ipx::current_core] ]
 set_property tooltip {Number of cols in block interleaver.} [ipgui::get_guiparamspec -name "col" -component [ipx::current_core] ]
 
+cd ../my_ip/$project_name
+ipx::add_file_group -type misc {} [ipx::current_core]
+ipx::add_file ./misc/logo.png [ipx::get_file_groups xilinx_miscfiles -of_objects [ipx::current_core]]
+set_property type image [ipx::get_files misc/logo.png -of_objects [ipx::get_file_groups xilinx_miscfiles -of_objects [ipx::current_core]]]
+ipx::add_file_group -type utility {} [ipx::current_core]
+ipx::add_file ./misc/logo.png [ipx::get_file_groups xilinx_utilityxitfiles -of_objects [ipx::current_core]]
+set_property type image [ipx::get_files misc/logo.png -of_objects [ipx::get_file_groups xilinx_utilityxitfiles -of_objects [ipx::current_core]]]
+set_property type LOGO [ipx::get_files misc/logo.png -of_objects [ipx::get_file_groups xilinx_utilityxitfiles -of_objects [ipx::current_core]]]
+cd ..
+cd ../project
+
 ipx::update_source_project_archive -component [ipx::current_core]
 ipx::create_xgui_files [ipx::current_core]
 ipx::update_checksums [ipx::current_core]
