@@ -4,13 +4,14 @@ close all;
 clc;
 
 %设定参数
+row=512;                      %设定块交织器行数
+col=32;                       %设定块交织器列数
+
 ploy=[1 0 0 0 0 0 0 1 0 0 1]; %设定生成多项式系数
 seed=[1 0 0 0 0 0 0 0 0 0];   %设定种子值
 data_rate=1000;               %设定数据速率
-frame_length=16384;           %设定原始数据的帧长
+frame_length=row*col;         %设定原始数据的帧长
 frame_number=2;               %设定仿真帧长数
-row=512;                      %设定块交织器行数
-col=32;                       %设定块交织器列数
 
 %配置m序列作为仿真数据源
 ploy_PN=fliplr(ploy); 
