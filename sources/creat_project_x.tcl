@@ -47,22 +47,26 @@ ipx::unload_core ../my_ip/$project_name/component.xml
 ipx::edit_ip_in_project -upgrade true -name tmp_edit_project -directory ../my_ip/$project_name ../my_ip/$project_name/component.xml
 
 set_property name $project_name [ipx::current_core]
-set_property version 1.0 [ipx::current_core]
+set_property version 1.3 [ipx::current_core]
 set_property display_name $project_name [ipx::current_core]
 
 set_property description {wyxee2000@163.com} [ipx::current_core]
 ipgui::move_param -component [ipx::current_core] -order 0 [ipgui::get_guiparamspec -name "deepth" -component [ipx::current_core]] -parent [ipgui::get_pagespec -name "Page 0" -component [ipx::current_core]]
 ipgui::move_param -component [ipx::current_core] -order 1 [ipgui::get_guiparamspec -name "mode" -component [ipx::current_core]] -parent [ipgui::get_pagespec -name "Page 0" -component [ipx::current_core]]
-ipgui::move_param -component [ipx::current_core] -order 2 [ipgui::get_guiparamspec -name "row" -component [ipx::current_core]] -parent [ipgui::get_pagespec -name "Page 0" -component [ipx::current_core]]
-ipgui::move_param -component [ipx::current_core] -order 3 [ipgui::get_guiparamspec -name "col" -component [ipx::current_core]] -parent [ipgui::get_pagespec -name "Page 0" -component [ipx::current_core]]
+ipgui::move_param -component [ipx::current_core] -order 2 [ipgui::get_guiparamspec -name "width" -component [ipx::current_core]] -parent [ipgui::get_pagespec -name "Page 0" -component [ipx::current_core]]
+ipgui::move_param -component [ipx::current_core] -order 3 [ipgui::get_guiparamspec -name "row" -component [ipx::current_core]] -parent [ipgui::get_pagespec -name "Page 0" -component [ipx::current_core]]
+ipgui::move_param -component [ipx::current_core] -order 4 [ipgui::get_guiparamspec -name "col" -component [ipx::current_core]] -parent [ipgui::get_pagespec -name "Page 0" -component [ipx::current_core]]
 set_property widget {textEdit} [ipgui::get_guiparamspec -name "deepth" -component [ipx::current_core] ]
 set_property tooltip {FIFO depth of input interface (must be 2^n).} [ipgui::get_guiparamspec -name "deepth" -component [ipx::current_core] ]
-set_property widget {textEdit} [ipgui::get_guiparamspec -name "mode" -component [ipx::current_core] ]
-set_property tooltip {0:Area optimized; 1:Speed optimized.} [ipgui::get_guiparamspec -name "mode" -component [ipx::current_core] ]
+set_property widget {textEdit} [ipgui::get_guiparamspec -name "width" -component [ipx::current_core] ]
+set_property tooltip {The bit width of interwoven elements.} [ipgui::get_guiparamspec -name "width" -component [ipx::current_core] ]
 set_property widget {textEdit} [ipgui::get_guiparamspec -name "row" -component [ipx::current_core] ]
 set_property tooltip {Number of rows in block interleaver.} [ipgui::get_guiparamspec -name "row" -component [ipx::current_core] ]
 set_property widget {textEdit} [ipgui::get_guiparamspec -name "col" -component [ipx::current_core] ]
 set_property tooltip {Number of cols in block interleaver.} [ipgui::get_guiparamspec -name "col" -component [ipx::current_core] ]
+set_property widget {comboBox} [ipgui::get_guiparamspec -name "mode" -component [ipx::current_core] ]
+set_property value_validation_list {"Area_optimized" "Speed_optimized"} [ipx::get_user_parameters mode -of_objects [ipx::current_core]]
+
 
 cd ../my_ip/$project_name
 ipx::add_file_group -type misc {} [ipx::current_core]

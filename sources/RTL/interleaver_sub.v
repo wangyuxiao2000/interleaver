@@ -2,27 +2,28 @@
 //function: 块交织器功能单元(行进列出)
 //Author  : WangYuxiao
 //Email   : wyxee2000@163.com
-//Data    : 2023.11.8
-//Version : V 1.1
+//Data    : 2024.1.15
+//Version : V 1.2
 /*************************************************************/
 `timescale 1 ns / 1 ps
 
 module interleaver_sub (clk,rst_n,s_axis_tdata,s_axis_tvalid,s_axis_tready,m_axis_tdata,m_axis_tvalid,m_axis_tlast,m_axis_tready);
 /************************************************工作参数设置************************************************/
+parameter width=1;    /*单个元素的位宽*/
 parameter row=512;    /*交织器的行数*/
 parameter col=32;     /*交织器的列数*/
 /***********************************************************************************************************/
-input clk;                 /*系统时钟*/
-input rst_n;               /*低电平同步复位信号(为将交织矩阵综合至RAM上)*/
+input clk;                            /*系统时钟*/
+input rst_n;                          /*低电平同步复位信号(为将交织矩阵综合至RAM上)*/
 
-input s_axis_tdata;        /*输入数据*/
-input s_axis_tvalid;       /*输入数据有效标志,高电平有效*/
-output reg s_axis_tready;  /*向上游模块发送读请求或读确认信号,高电平有效*/
+input [width-1:0] s_axis_tdata;       /*输入数据*/
+input s_axis_tvalid;                  /*输入数据有效标志,高电平有效*/
+output reg s_axis_tready;             /*向上游模块发送读请求或读确认信号,高电平有效*/
 
-output reg m_axis_tdata;   /*输出数据*/
-output reg m_axis_tvalid;  /*输出数据有效标志,高电平有效*/
-output reg m_axis_tlast;   /*交织块输出结束标志,高电平有效*/
-input m_axis_tready;       /*下游模块传来的读请求或读确认信号,高电平有效*/
+output reg [width-1:0] m_axis_tdata;   /*输出数据*/
+output reg m_axis_tvalid;              /*输出数据有效标志,高电平有效*/
+output reg m_axis_tlast;               /*交织块输出结束标志,高电平有效*/
+input m_axis_tready;                   /*下游模块传来的读请求或读确认信号,高电平有效*/
 
 
 
@@ -36,7 +37,7 @@ reg state;                                /*状态机*/
 reg [$clog2(block_once_need):0] in_cnt;   /*输入计数器*/
 reg [$clog2(row):0] out_row_cnt;          /*输出行计数器*/
 reg [$clog2(col+1):0] out_col_cnt;        /*输出列计数器*/
-reg [0:0] block [row*col-1:0];            /*交织块存储器*/
+reg [width-1:0] block [row*col-1:0];      /*交织块存储器*/
 
 always@(posedge clk)
 begin

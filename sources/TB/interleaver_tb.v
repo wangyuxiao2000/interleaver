@@ -34,7 +34,8 @@ reg m_tready;
 
 /************************例化待测模块************************/
 interleaver #(.deepth(4),
-              .mode(1),
+              .mode("Speed_optimized"),
+              .width(`stimulus_width),
               .row(512),
               .col(32)
              ) i1 (.clk(clk),
@@ -91,7 +92,7 @@ begin
         begin
           if(s_tready)
             begin
-              $fscanf(file_stimulus,"%b",s_tdata); /*数据进制需根据实际stimulus.txt文件设置*/
+              $fscanf(file_stimulus,"%d",s_tdata); /*数据进制需根据实际stimulus.txt文件设置*/
               if($feof(file_stimulus))
                 begin
                   s_tdata=0; /*txt文件中的数据读空后,清零数据输入总线,并将输入有效标志信号拉低*/
@@ -141,7 +142,7 @@ begin
   file_result=$fopen(`result_path,"w");
   @(posedge m_tvalid) /*触发条件为复位结束或产生有效输出数据;此处规定产生有效输出数据后开始采集输出数据*/
   begin
-    $fscanf(file_response,"%b",response); /*数据进制需根据实际response.txt文件设置*/
+    $fscanf(file_response,"%d",response); /*数据进制需根据实际response.txt文件设置*/
     time_data_out=$time;
     while(response_en)
       begin
@@ -158,7 +159,7 @@ begin
             begin
               response=response;
               response_en=1;
-              $fwrite(file_result,"%b\n",m_tdata); /*数据进制需根据实际result.txt文件设置*/
+              $fwrite(file_result,"%d\n",m_tdata); /*数据进制需根据实际result.txt文件设置*/
               if(response_num==0)
                 begin
                   $display("time=%t, Data outputs start, the output is delayed by %d clock cycles relative to the input",$time,(time_data_out-time_data_in)/`Period); 
@@ -168,13 +169,13 @@ begin
                 response_num=response_num+1;
 
               if(m_tdata==response)
-                $display("time=%t,response_num=%d,rst_n=%b,m_tdata=%b",$time,response_num,rst_n,m_tdata); /*数据进制需根据实际response.txt文件设置*/
+                $display("time=%t,response_num=%d,rst_n=%b,m_tdata=%d",$time,response_num,rst_n,m_tdata); /*数据进制需根据实际response.txt文件设置*/
               else
                 begin
-                  $display("TEST FALLED : time=%t,response_num=%d,rst_n=%b,m_tdata is %b but should be %b",$time,response_num,rst_n,m_tdata,response); /*数据进制需根据实际response.txt文件设置*/
+                  $display("TEST FALLED : time=%t,response_num=%d,rst_n=%b,m_tdata is %d but should be %d",$time,response_num,rst_n,m_tdata,response); /*数据进制需根据实际response.txt文件设置*/
                   $finish; /*若遇到测试失败的测试向量后需立即停止测试,则此处需要finish;若遇到测试失败的测试向量后仍继续测试,此处需注释掉finish*/
                 end
-              $fscanf(file_response,"%b",response); /*数据进制需根据实际response.txt文件设置*/
+              $fscanf(file_response,"%d",response); /*数据进制需根据实际response.txt文件设置*/
             end
         end
       end
