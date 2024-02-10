@@ -83,8 +83,7 @@ begin
   stimulus_en=1;
   @(posedge rst_n)/*复位结束后经过两个时钟周期允许施加激励*/
   begin
-    @(posedge clk);
-    @(posedge clk);
+    #(`Period*2.1)
     s_tvalid=1;/*将输入有效标志信号拉高*/
     while(stimulus_en)
       begin

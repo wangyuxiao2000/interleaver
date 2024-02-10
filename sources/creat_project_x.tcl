@@ -47,7 +47,7 @@ ipx::unload_core ../my_ip/$project_name/component.xml
 ipx::edit_ip_in_project -upgrade true -name tmp_edit_project -directory ../my_ip/$project_name ../my_ip/$project_name/component.xml
 
 set_property name $project_name [ipx::current_core]
-set_property version 1.3 [ipx::current_core]
+set_property version 1.4 [ipx::current_core]
 set_property display_name $project_name [ipx::current_core]
 
 set_property description {wyxee2000@163.com} [ipx::current_core]

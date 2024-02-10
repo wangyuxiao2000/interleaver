@@ -2,8 +2,8 @@
 //function: 块交织器功能单元(行进列出)
 //Author  : WangYuxiao
 //Email   : wyxee2000@163.com
-//Data    : 2024.1.15
-//Version : V 1.2
+//Data    : 2024.2.10
+//Version : V 1.3
 /*************************************************************/
 `timescale 1 ns / 1 ps
 
@@ -39,6 +39,12 @@ reg [$clog2(row):0] out_row_cnt;          /*输出行计数器*/
 reg [$clog2(col+1):0] out_col_cnt;        /*输出列计数器*/
 reg [width-1:0] block [row*col-1:0];      /*交织块存储器*/
 
+wire [$clog2(row*col-1):0] in_index;      /*交织器输入索引*/
+wire [$clog2(row*col-1):0] out_index;     /*交织器输出索引*/
+
+assign in_index=row*col-1-in_cnt;
+assign out_index=row*col-out_col_cnt-col*(out_row_cnt-1);
+
 always@(posedge clk)
 begin
   if(!rst_n)
@@ -56,7 +62,7 @@ begin
     begin
       case(state)
         STATE_data_in : begin
-                          block[row*col-1-in_cnt]<=s_axis_tdata;
+                          block[in_index]<=s_axis_tdata;
                           m_axis_tdata<=0;
                           m_axis_tvalid<=0;
                           m_axis_tlast<=0;
@@ -95,7 +101,7 @@ begin
                                out_row_cnt<=out_row_cnt+1;
                                out_col_cnt<=out_col_cnt;
                                s_axis_tready<=0;
-                               m_axis_tdata<=block[row*col-out_col_cnt-col*(out_row_cnt-1)];
+                               m_axis_tdata<=block[out_index];
                                m_axis_tvalid<=1;
                                m_axis_tlast<=0;
                                state<=state;
@@ -124,7 +130,7 @@ begin
                                else if(out_row_cnt==row&&out_col_cnt==col)
                                  begin
                                    s_axis_tready<=0;
-                                   m_axis_tdata<=block[row*col-out_col_cnt-col*(out_row_cnt-1)];
+                                   m_axis_tdata<=block[out_index];
                                    m_axis_tvalid<=1;
                                    m_axis_tlast<=1;
                                    state<=state;
@@ -132,7 +138,7 @@ begin
                                else
                                  begin
                                    s_axis_tready<=0;
-                                   m_axis_tdata<=block[row*col-out_col_cnt-col*(out_row_cnt-1)];
+                                   m_axis_tdata<=block[out_index];
                                    m_axis_tvalid<=1;
                                    m_axis_tlast<=0;
                                    state<=state;
