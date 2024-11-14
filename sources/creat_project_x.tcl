@@ -2,6 +2,8 @@
 set project_name interleaver
 # 设置芯片型号(将[]替换为芯片型号)
 set chip_type xc7a200tfbg484-1
+# 设定IP版本
+set ip_verion 1.4
 # 是否将当前设计导出为自定义IP核(ip_out_p=1进行)
 set ip_out_p 1
 # 是否进行综合操作(synth_p=1进行)
@@ -47,7 +49,7 @@ ipx::unload_core ../my_ip/$project_name/component.xml
 ipx::edit_ip_in_project -upgrade true -name tmp_edit_project -directory ../my_ip/$project_name ../my_ip/$project_name/component.xml
 
 set_property name $project_name [ipx::current_core]
-set_property version 1.4 [ipx::current_core]
+set_property version $ip_verion [ipx::current_core]
 set_property display_name $project_name [ipx::current_core]
 
 set_property description {wyxee2000@163.com} [ipx::current_core]

@@ -3,7 +3,7 @@
 //Author  : WangYuxiao
 //Email   : wyxee2000@163.com
 //Data    : 2024.2.10
-//Version : V 1.3
+//Version : V 1.4
 /*************************************************************/
 `timescale 1 ns / 1 ps
 
